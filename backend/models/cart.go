@@ -9,6 +9,6 @@ type Cart struct {
 	CartQuantity float64 `json:"cartQuantity"`
 	ProductID    uint
 	UserID       uint
-	Products     Products
-	Users        Users
+	Product      Products
+	User         Users
 }

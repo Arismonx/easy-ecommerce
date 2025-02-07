@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Arismonx/easy-ecommerce/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -41,6 +42,8 @@ func ConnectDB() {
 	if err != nil {
 		panic("failed to connect database")
 	}
+	// Auto migrate the schema
 
+	db.AutoMigrate(&models.Users{}, &models.Products{}, &models.Cart{}, &models.Orders{}, &models.Orderlines{})
 	fmt.Println("Database connected", db)
 }

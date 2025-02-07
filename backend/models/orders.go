@@ -12,6 +12,6 @@ type Orders struct {
 	OrderAddress string    `json:"orderAddress"`
 	OrderStatus  string    `json:"orderStatus"`
 	OrderAmount  float64   `json:"orderAmount"`
-	UsersID      uint
-	Users        Users
+	UserID       uint
+	User         Users
 }

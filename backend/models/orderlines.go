@@ -12,6 +12,6 @@ type Orderlines struct {
 	OrderLinePriceSubtotal float64 `json:"orderLinePriceSubtotal"`
 	OrderID                uint
 	ProductID              uint
-	Orders                 Orders
-	Products               Products
+	Order                  Orders
+	Product                Products
 }
