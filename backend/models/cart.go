@@ -9,6 +9,6 @@ type Cart struct {
 	CartQuantity float64 `json:"cartQuantity"`
 	ProductID    uint
 	UserID       uint
-	Products     Products `gorm:"foreignKey:"ProductID"`
-	Users        Users    `gorm:"foreignKey:"UserID"`
+	Products     Products
+	Users        Users
 }

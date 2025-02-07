@@ -12,6 +12,6 @@ type Orderlines struct {
 	OrderLinePriceSubtotal float64 `json:"orderLinePriceSubtotal"`
 	OrderID                uint
 	ProductID              uint
-	Orders                 Orders   `gorm:"foreignKey:"OrderID"`
-	Products               Products `gorm:"foreignKey:"ProductID"`
+	Orders                 Orders
+	Products               Products
 }
