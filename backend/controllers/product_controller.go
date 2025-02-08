@@ -17,3 +17,9 @@ func CreateProduct(c *fiber.Ctx) error {
 	config.DB.Create(newProduct)
 	return c.JSON(newProduct)
 }
+
+func GetProducts(c *fiber.Ctx) error {
+	var product []models.Products
+	config.DB.Find(&product)
+	return c.JSON(product)
+}

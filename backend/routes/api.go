@@ -12,5 +12,6 @@ func Setup(app *fiber.App) {
 	// app.Post("/api/user", controllers.CreateUser)
 
 	//API Product
+	app.Get("/api/product", controllers.GetProducts)
 	app.Post("/api/product", controllers.CreateProduct)
 }
