@@ -72,7 +72,7 @@ func LoginUser(c *fiber.Ctx) error {
 	claims["user_id"] = user.ID
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
-	_, err := token.SignedString([]byte(jwtSecretKey))
+	t, err := token.SignedString([]byte(jwtSecretKey))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Cannot create token",
@@ -81,5 +81,6 @@ func LoginUser(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"message": "Login Successful",
+		"token":   t,
 	})
 }
