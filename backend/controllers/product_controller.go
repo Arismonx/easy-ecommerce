@@ -23,3 +23,25 @@ func GetProducts(c *fiber.Ctx) error {
 	config.DB.Find(&product)
 	return c.JSON(product)
 }
+
+func GetProductByID(c *fiber.Ctx) error {
+	product := new(models.Products)
+	id := c.Params("id")
+	config.DB.First(&product, id)
+	return c.JSON(product)
+}
+
+func UpdateProductByID(c *fiber.Ctx) error {
+	product := new(models.Products)
+	id := c.Params("id")
+	config.DB.First(&product, id)
+
+	if err := c.BodyParser(product); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
+	}
+	config.DB.Save(&product)
+
+	return c.JSON(product)
+}
