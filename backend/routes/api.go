@@ -7,4 +7,10 @@ import (
 
 func Setup(app *fiber.App) {
 	app.Get("/", controllers.Hello)
+
+	//API user
+	// app.Post("/api/user", controllers.CreateUser)
+
+	//API Product
+	app.Post("/api/product", controllers.CreateProduct)
 }

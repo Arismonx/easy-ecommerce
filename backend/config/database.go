@@ -13,6 +13,8 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+var DB *gorm.DB
+
 func ConnectDB() {
 
 	// Read database configuration from .env file
@@ -35,7 +37,8 @@ func ConnectDB() {
 	)
 
 	// Connect to the database using GORM
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})
 
@@ -44,6 +47,6 @@ func ConnectDB() {
 	}
 	// Auto migrate the schema
 
-	db.AutoMigrate(&models.Users{}, &models.Products{}, &models.Cart{}, &models.Orders{}, &models.Orderlines{})
-	fmt.Println("Database connected", db)
+	DB.AutoMigrate(&models.Users{}, &models.Products{}, &models.Cart{}, &models.Orders{}, &models.Orderlines{})
+	fmt.Println("Database connected", DB)
 }
