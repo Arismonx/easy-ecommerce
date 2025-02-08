@@ -45,3 +45,13 @@ func UpdateProductByID(c *fiber.Ctx) error {
 
 	return c.JSON(product)
 }
+
+func DeleteProductByID(c *fiber.Ctx) error {
+	product := new(models.Products)
+	id := c.Params("id")
+	config.DB.Delete(&product, id)
+
+	return c.JSON(fiber.Map{
+		"message": "Delete Successful!",
+	})
+}
