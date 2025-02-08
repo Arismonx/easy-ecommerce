@@ -9,7 +9,7 @@ func Setup(app *fiber.App) {
 	app.Get("/", controllers.Hello)
 
 	//API user
-	// app.Post("/api/user", controllers.CreateUser)
+	app.Post("/register", controllers.Register)
 
 	//API Product
 	app.Get("/api/product", controllers.GetProducts)
