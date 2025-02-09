@@ -126,3 +126,23 @@ func UpdateCartByID(c *fiber.Ctx) error {
 	return c.JSON(updateCart)
 
 }
+
+func DeleteCartByID(c *fiber.Ctx) error {
+	deleteCart := new(models.Cart)
+	id := c.Params("id")
+
+	if err := config.DB.First(&deleteCart, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Cart not found",
+		})
+	}
+	if err := config.DB.Delete(&deleteCart, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Cannot delete cart",
+		})
+	}
+
+	return c.Status(fiber.StatusNoContent).JSON(fiber.Map{
+		"message": "Delete Successful!",
+	})
+}
