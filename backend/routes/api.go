@@ -23,4 +23,5 @@ func Setup(app *fiber.App) {
 	app.Post("/api/cart", middleware.AuthRequired, controllers.CreateCart)
 	app.Get("/api/cart", middleware.AuthRequired, controllers.GetCarts)
 	app.Get("/api/cart/:id", middleware.AuthRequired, controllers.GetCartByID)
+	app.Put("/api/cart/:id", middleware.AuthRequired, controllers.UpdateCartByID)
 }

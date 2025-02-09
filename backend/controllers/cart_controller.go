@@ -72,3 +72,57 @@ func GetCartByID(c *fiber.Ctx) error {
 	}
 	return c.JSON(cart)
 }
+
+func UpdateCartByID(c *fiber.Ctx) error {
+	updateCart := new(models.Cart)
+	id := c.Params("id")
+
+	// Load the existing cart
+	if err := config.DB.First(&updateCart, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Cart not found",
+		})
+	}
+
+	if err := c.BodyParser(updateCart); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
+	}
+
+	if updateCart.ProductID == 0 || updateCart.UserID == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "ProductID and UserID are Required",
+		})
+	}
+
+	// Check ProductID delete?
+	var product models.Products
+	if err := config.DB.Unscoped().Where("id = ? AND deleted_at IS NOT NULL", updateCart.ProductID).First(&product).Error; err == nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Product has been deleted",
+		})
+	}
+	// Check ProductID delete?
+	var user models.Users
+	if err := config.DB.Unscoped().Where("id = ? AND deleted_at IS NOT NULL", updateCart.ProductID).First(&user).Error; err == nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "User has been deleted",
+		})
+	}
+
+	if err := config.DB.Save(&updateCart).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot Update cart",
+		})
+	}
+
+	// Preload Product and User data
+	if err := config.DB.Preload("Product").Preload("User").First(&updateCart, updateCart.ID).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot load related data",
+		})
+	}
+	return c.JSON(updateCart)
+
+}
