@@ -24,9 +24,8 @@ func CreateOrder(c *fiber.Ctx) error {
 			"error": "User has been deleted",
 		})
 	}
-
-	newOrder.OrderDate = time.Now()
 	newOrder.OrderAddress = user.Address
+	newOrder.OrderDate = time.Now()
 	if newOrder.OrderStatus == "" {
 		newOrder.OrderStatus = "Draft"
 	}
@@ -50,4 +49,28 @@ func CreateOrder(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(newOrder)
+}
+
+func GetOrders(c *fiber.Ctx) error {
+	var order []models.Orders
+
+	if err := config.DB.Preload("User").Find(&order).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot get orders",
+		})
+	}
+
+	return c.JSON(order)
+}
+
+func GetOrderByID(c *fiber.Ctx) error {
+	order := new(models.Orders)
+	id := c.Params("id")
+
+	if err := config.DB.Preload("User").First(&order, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Cart not Found",
+		})
+	}
+	return c.JSON(order)
 }

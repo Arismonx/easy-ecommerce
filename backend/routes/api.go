@@ -28,4 +28,6 @@ func Setup(app *fiber.App) {
 
 	//API Order
 	app.Post("/api/order", middleware.AuthRequired, controllers.CreateOrder)
+	app.Get("/api/order", middleware.AuthRequired, controllers.GetOrders)
+	app.Get("/api/order/:id", middleware.AuthRequired, controllers.GetOrderByID)
 }
