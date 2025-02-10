@@ -137,3 +137,24 @@ func UpdateOrderByID(c *fiber.Ctx) error {
 
 	return c.JSON(updateOrder)
 }
+
+func DeleteOrderByuserID(c *fiber.Ctx) error {
+	var orders []models.Orders
+	userID := c.Query("userID")
+
+	if userID != "" {
+		if err := config.DB.Where("user_id = ?", userID).Delete(&orders).Error; err != nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "Orders not found",
+			})
+		}
+	} else {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "UserID is required",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Delete Successful!",
+	})
+}
