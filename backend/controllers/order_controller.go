@@ -94,56 +94,46 @@ func GetOrdersByUserID(c *fiber.Ctx) error {
 	return c.JSON(orders)
 }
 
-// func UpdateOrderByID(c *fiber.Ctx) error {
-// 	updateCart := new(models.Cart)
-// 	id := c.Params("id")
+func UpdateOrderByID(c *fiber.Ctx) error {
+	id := c.Params("id")
+	updateOrder := new(models.Orders)
 
-// 	// Load the existing cart
-// 	if err := config.DB.First(&updateCart, id).Error; err != nil {
-// 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-// 			"error": "Cart not found",
-// 		})
-// 	}
+	// Load the existing order
+	if err := config.DB.First(&updateOrder, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Order not found",
+		})
+	}
 
-// 	if err := c.BodyParser(updateCart); err != nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"error": "Cannot parse JSON",
-// 		})
-// 	}
+	// Parse the request body into the updateOrder struct
+	if err := c.BodyParser(updateOrder); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
+	}
 
-// 	if updateCart.ProductID == 0 || updateCart.UserID == 0 {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"error": "ProductID and UserID are Required",
-// 		})
-// 	}
+	// Update OrderStatus if provided
+	if updateOrder.OrderStatus != "" {
+		if updateOrder.OrderStatus != "cancel" && updateOrder.OrderStatus != "confirmed" && updateOrder.OrderStatus != "draft" {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Invalid OrderStatus",
+			})
+		}
+	}
 
-// 	// Check ProductID delete?
-// 	var product models.Products
-// 	if err := config.DB.Unscoped().Where("id = ? AND deleted_at IS NOT NULL", updateCart.ProductID).First(&product).Error; err == nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"error": "Product has been deleted",
-// 		})
-// 	}
-// 	// Check ProductID delete?
-// 	var user models.Users
-// 	if err := config.DB.Unscoped().Where("id = ? AND deleted_at IS NOT NULL", updateCart.ProductID).First(&user).Error; err == nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"error": "User has been deleted",
-// 		})
-// 	}
+	// Save the updated order
+	if err := config.DB.Save(&updateOrder).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot update order",
+		})
+	}
 
-// 	if err := config.DB.Save(&updateCart).Error; err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": "Cannot Update cart",
-// 		})
-// 	}
+	// Preload User data
+	if err := config.DB.Preload("User").First(&updateOrder, updateOrder.ID).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot load related data",
+		})
+	}
 
-// 	// Preload Product and User data
-// 	if err := config.DB.Preload("Product").Preload("User").First(&updateCart, updateCart.ID).Error; err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": "Cannot load related data",
-// 		})
-// 	}
-// 	return c.JSON(updateCart)
-
-// }
+	return c.JSON(updateOrder)
+}

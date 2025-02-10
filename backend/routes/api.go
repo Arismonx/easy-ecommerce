@@ -31,4 +31,5 @@ func Setup(app *fiber.App) {
 	app.Get("/api/order", middleware.AuthRequired, controllers.GetOrders)
 	app.Get("/api/order/user", middleware.AuthRequired, controllers.GetOrdersByUserID)
 	app.Get("/api/order/:id", middleware.AuthRequired, controllers.GetOrderByID)
+	app.Put("/api/order/:id", middleware.AuthRequired, controllers.UpdateOrderByID)
 }
