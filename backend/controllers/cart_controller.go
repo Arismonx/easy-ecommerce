@@ -29,7 +29,7 @@ func CreateCart(c *fiber.Ctx) error {
 	}
 	// Check ProductID delete?
 	var user models.Users
-	if err := config.DB.Unscoped().Where("id = ? AND deleted_at IS NOT NULL", newCart.ProductID).First(&user).Error; err == nil {
+	if err := config.DB.Unscoped().Where("id = ? AND deleted_at IS NOT NULL", newCart.UserID).First(&user).Error; err == nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "User has been deleted",
 		})

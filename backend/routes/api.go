@@ -26,4 +26,6 @@ func Setup(app *fiber.App) {
 	app.Put("/api/cart/:id", middleware.AuthRequired, controllers.UpdateCartByID)
 	app.Delete("/api/cart/:id", middleware.AuthRequired, controllers.DeleteCartByID)
 
+	//API Order
+	app.Post("/api/order", middleware.AuthRequired, controllers.CreateOrder)
 }
