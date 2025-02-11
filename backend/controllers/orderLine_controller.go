@@ -51,3 +51,19 @@ func CreateOrderline(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(newOrderline)
 }
+
+func GetOrderlines(c *fiber.Ctx) error {
+	var orderline []models.Orderlines
+
+	if err := config.DB.Preload("Product").Preload("Order").Find(&orderline).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot get orderlines",
+		})
+	}
+
+	return c.JSON(orderline)
+}
+
+func GetOrderlineByID(c *fiber.Ctx) error {
+
+}
