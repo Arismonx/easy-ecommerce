@@ -65,5 +65,14 @@ func GetOrderlines(c *fiber.Ctx) error {
 }
 
 func GetOrderlineByID(c *fiber.Ctx) error {
+	orderlien := new(models.Orderlines)
+	id := c.Params("id")
 
+	if err := config.DB.First(orderlien, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Orderlien not found",
+		})
+	}
+
+	return c.JSON(orderlien)
 }

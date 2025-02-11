@@ -36,6 +36,6 @@ func Setup(app *fiber.App) {
 
 	//API Orderline
 	app.Get("/api/orderline", middleware.AuthRequired, controllers.GetOrderlines)
-	// app.Get("/api/orderline/:id", middleware.AuthRequired, controllers.GetOrderlineByID)
+	app.Get("/api/orderline/:id", middleware.AuthRequired, controllers.GetOrderlineByID)
 	app.Post("/api/orderline", middleware.AuthRequired, controllers.CreateOrderline)
 }
