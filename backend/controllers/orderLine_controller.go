@@ -76,3 +76,24 @@ func GetOrderlineByID(c *fiber.Ctx) error {
 
 	return c.JSON(orderlien)
 }
+
+func DeleteOrderlineByID(c *fiber.Ctx) error {
+	orderline := new(models.Orderlines)
+	id := c.Params("id")
+
+	if err := config.DB.First(&orderline, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Orderline not found",
+		})
+	}
+
+	if err := config.DB.Delete(&orderline, id).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot delete orderline",
+		})
+	}
+
+	return c.Status(fiber.StatusNoContent).JSON(fiber.Map{
+		"message": "Delete Successful",
+	})
+}
