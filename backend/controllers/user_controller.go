@@ -84,3 +84,5 @@ func LoginUser(c *fiber.Ctx) error {
 		"token":   t,
 	})
 }
+
+
