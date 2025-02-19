@@ -78,6 +78,7 @@ docker-compose up -d
 ```
 /ecommerce-project
 │── backend/              # Go Fiber backend service
+│── backend/Dackerfile    # Dockerfile
 │── backend/.env          # Environment variables
 │── frontend/my-app       # Next.js frontend
 │── docker-compose.yml
