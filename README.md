@@ -56,7 +56,7 @@ DB_NAME=mydatabase
 ```sh
 cd backend
 go mod tidy
-go run main.go
+go run .
 ```
 
 #### 2. Start Frontend (Next.js)
@@ -78,8 +78,8 @@ docker-compose up -d
 ```
 /ecommerce-project
 │── backend/              # Go Fiber backend service
+│── backend/.env          # Environment variables
 │── frontend/my-app       # Next.js frontend
-│── .env                  # Environment variables
 │── docker-compose.yml
 │── README.md
 ```
